@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" style="
+    width: 100%;
+    height: 100%;
+    position: fixed;
+">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel='stylesheet' href='luckysheet/plugins/css/pluginsCss.css' />
+  <link rel='stylesheet' href='luckysheet/plugins/plugins.css' />
+  <link rel='stylesheet' href='luckysheet/css/luckysheet.css' />
+  <link rel='stylesheet' href='luckysheet/assets/iconfont/iconfont.css' />
+  <script src="luckysheet/plugins/js/plugin.js"></script>
+  <script src="luckysheet/luckysheet.umd.js"></script>
+  <script src="luckyexcel/luckyexcel.umd.js"></script>
+</head>
+
+<body style="
+    width: 100%;
+    height: 100%;
+    margin: 0;
+">
+  <div id="container" style="height: calc(100% - 23px);"></div>
+  <script>
+    //patch
+    //https://github.com/engalar/Luckysheet/commit/04c24ac35901b479ba4616065f42dd4154b776a4
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+
+    let widgetid = params.widgetid;
+
+    async function setup(data, lang, updateUrl) {
+      const first = luckysheet.getAllSheets().length == 0;
+
+      let options = {
+        container: 'container', //luckysheet-id
+        showinfobar: false,
+        showsheetbar: true,
+        data,
+        enableAddRow: false,
+        showtoolbar: true,
+        allowUpdate: true,
+        enableAddBackTop: false,
+        lang,
+        updateUrl,
+        cellRightClickConfig: {
+          copy: false, // copy
+          copyAs: false, // copy as
+          paste: false, // paste
+          insertRow: false, // insert row
+          insertColumn: false, // insert column
+          deleteRow: false, // delete the selected row
+          deleteColumn: false, // delete the selected column
+          deleteCell: false, // delete cell
+          hideRow: false, // hide the selected row and display the selected row
+          hideColumn: false, // hide the selected column and display the selected column
+          rowHeight: false, // row height
+          columnWidth: false, // column width
+          clear: false, // clear content
+          matrix: false, // matrix operation selection
+          sort: false, // sort selection
+          filter: false, // filter selection
+          chart: false, // chart generation
+          image: false, // insert picture
+          link: false, // insert link
+          data: false, // data verification
+          cellFormat: false // Set cell format
+        },
+        sheetFormulaBar: false,
+        showinfobar: false,
+        showsheetbar: false,
+        showstatisticBar: false,
+        showtoolbarConfig: {
+          undoRedo: false, //Undo redo
+          paintFormat: false, //Format brush
+          currencyFormat: false, //currency format
+          percentageFormat: false, //Percentage format
+          numberDecrease: false, //'Decrease the number of decimal places'
+          numberIncrease: false, //'Increase the number of decimal places
+          moreFormats: false, //'More Formats'
+          font: false, //'font'
+          fontSize: false, //'Font size'
+          bold: false, //'Bold (Ctrl+B)'
+          italic: false, //'Italic (Ctrl+I)'
+          strikethrough: false, //'Strikethrough (Alt+Shift+5)'
+          underline: false, // 'Underline (Alt+Shift+6)'
+          textColor: false, //'Text color'
+          fillColor: false, //'Cell color'
+          border: false, //'border'
+          mergeCell: false, //'Merge cells'
+          horizontalAlignMode: false, //'Horizontal alignment'
+          verticalAlignMode: false, //'Vertical alignment'
+          textWrapMode: false, //'Wrap mode'
+          textRotateMode: false, //'Text Rotation Mode'
+          image: false, // 'Insert picture'
+          link: false, // 'Insert link'
+          chart: false, //'chart' (the icon is hidden, but if the chart plugin is configured, you can still create a new chart by right click)
+          postil: false, //'comment'
+          pivotTable: false, //'PivotTable'
+          function: false, //'formula'
+          frozenMode: false, //'freeze mode'
+          sortAndFilter: false, //'Sort and filter'
+          conditionalFormat: false, //'Conditional Format'
+          dataVerification: false, // 'Data Verification'
+          splitColumn: false, //'Split column'
+          screenshot: false, //'screenshot'
+          findAndReplace: false, //'Find and Replace'
+          protection: false, // 'Worksheet protection'
+          print: false, // 'Print'
+        },
+        fontList: [
+          {
+            "fontName": "HanaleiFill",
+            "url": "luckysheet/assets/iconfont/HanaleiFill-Regular.ttf"
+          },
+          {
+            "fontName": "Anton",
+            "url": "luckysheet/assets/iconfont/Anton-Regular.ttf"
+          },
+          {
+            "fontName": "Pacifico",
+            "url": "luckysheet/assets/iconfont/Pacifico-Regular.ttf"
+          }
+        ],
+        hook: {
+          cellDragStop: function (cell, postion, sheetFile, ctx, event) {
+            // console.info(cell, postion, sheetFile, ctx, event);
+          },
+          rowTitleCellRenderBefore: function (rowNum, postion, ctx) {
+            // console.log(rowNum);
+          },
+          rowTitleCellRenderAfter: function (rowNum, postion, ctx) {
+            // console.log(ctx);
+          },
+          columnTitleCellRenderBefore: function (columnAbc, postion, ctx) {
+            // console.log(columnAbc);
+          },
+          columnTitleCellRenderAfter: function (columnAbc, postion, ctx) {
+            // console.log(postion);
+          },
+          cellRenderBefore: function (cell, postion, sheetFile, ctx) {
+            // console.log(cell, postion, sheetFile, ctx);
+          },
+          cellRenderAfter: function (cell, postion, sheetFile, ctx) {
+            // console.log(postion);
+          },
+          cellMousedownBefore: function (cell, postion, sheetFile, ctx) {
+            // console.log(postion);
+          },
+          cellMousedown: function (cell, postion, sheetFile, ctx) {
+            // console.log(sheetFile);
+          },
+          sheetMousemove: function (cell, postion, sheetFile, moveState, ctx) {
+            // console.log(cell, postion, sheetFile, moveState, ctx);
+          },
+          sheetMouseup: function (cell, postion, sheetFile, moveState, ctx) {
+            // console.log(cell, postion, sheetFile, moveState, ctx);
+          },
+          cellAllRenderBefore: function (data, sheetFile, ctx) {
+            // console.info(data, sheetFile, ctx)
+          },
+          updated: function (operate) {
+            // console.info(operate)
+          },
+          cellUpdateBefore: async function (r, c, value, isRefresh) {
+            //fix not support async
+            // console.info('cellUpdateBefore', r, c, value, isRefresh)
+            //cancel edit
+            return true;
+          },
+          cellUpdated: function (r, c, oldValue, newValue, isRefresh) {
+            // console.info('cellUpdated', r, c, oldValue, newValue, isRefresh)
+            window.parent.postMessage({ mx_luckysheet: { id: 'cell_updated', widgetid, data: { r, c, oldValue, newValue, isRefresh } } }, '*');
+          },
+          sheetActivate: function (index, isPivotInitial, isNewSheet) {
+            // console.info(index, isPivotInitial, isNewSheet)
+          },
+          rangeSelect: function (index, sheet) {
+            // console.info(index, sheet)
+            window.parent.postMessage({ mx_luckysheet: { id: 'rangeSelect', widgetid, data: sheet } }, '*');
+          },
+          commentInsertBefore: function (r, c) {
+            // console.info(r, c)
+          },
+          commentInsertAfter: function (r, c, cell) {
+            // console.info(r, c, cell)
+          },
+          commentDeleteBefore: function (r, c, cell) {
+            // console.info(r, c, cell)
+          },
+          commentDeleteAfter: function (r, c, cell) {
+            // console.info(r, c, cell)
+          },
+          commentUpdateBefore: function (r, c, value) {
+            // console.info(r, c, value)
+          },
+          commentUpdateAfter: function (r, c, oldCell, newCell) {
+            // console.info(r, c, oldCell, newCell)
+          },
+          cellEditBefore: function (range) {
+            // console.info(range)
+          },
+          workbookCreateAfter: function (json) {
+            // console.info(json)
+          },
+          rangePasteBefore: function (range, data) {
+            // console.info('rangePasteBefore', range, data)
+            // return false; //Can intercept paste
+          },
+        }
+      };
+
+      if (data instanceof File || data instanceof ArrayBuffer) {
+        options.data = await new Promise((resolve, reject) => {
+          LuckyExcel.transformExcelToLucky(
+            data,
+            function (exportJson, luckysheetfile) {
+              resolve(exportJson.sheets);
+            },
+            function (err) {
+              console.error("Import failed. Is your fail a valid xlsx?");
+              reject();
+            }
+          )
+        });
+      }
+
+      if (!first) {
+        const preData = options.data;
+        options = luckysheet.toJson();
+        options.data = preData;
+
+        //fixme
+        options.allowUpdate = false;
+        if (updateUrl !== undefined) {
+          options.updateUrl = updateUrl;
+        }
+        if (lang !== undefined) {
+          options.lang = lang;
+        }
+        // luckysheet.setLuckysheetfile(preData);
+      } else {
+        // luckysheet.create(options);
+      }
+      luckysheet.create(options);
+    }
+
+    window.addEventListener("message", (event) => {
+      if (event.data.mx_luckysheet && event.data.mx_luckysheet.widgetid === widgetid) {
+        const data = event.data.mx_luckysheet.data;
+        switch (event.data.mx_luckysheet.id) {
+          case 'setup':
+            widgetid = event.data.mx_luckysheet.widgetid;
+            setup(event.data.mx_luckysheet.data, event.data.mx_luckysheet.lang, event.data.mx_luckysheet.updateUrl);
+            break;
+          case 'setSheetActive':
+            order = event.data.mx_luckysheet.order;
+            break;
+          case 'lock':
+            luckysheet.setConfig($.extend(true, luckysheet.toJson().config, data));
+            break;
+          case 'setValue':
+            const sels = luckysheet.getRangeWithFlatten();
+            if (sels.length > 0) {
+              luckysheet.setCellValue(sels[0].r, sels[0].c, data);
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    }, false);
+    window.parent.postMessage({ mx_luckysheet: { id: 'load', widgetid } }, '*');
+  </script>
+</body>
+
+</html>
